@@ -1,3 +1,4 @@
+import os
 from functools import wraps
 
 from flask import Flask, render_template, redirect, url_for, flash, abort
@@ -10,15 +11,17 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm, RegistrationForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 # CONNECT TO DB
 login_manager = LoginManager()
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager.init_app(app)
